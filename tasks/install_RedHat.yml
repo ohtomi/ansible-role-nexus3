@@ -1,0 +1,62 @@
+---
+# included file
+
+- name: Nexus User
+  user:
+    name: "{{ nexus3_username }}"
+  become: yes
+
+- name: Nexus Home Directory
+  file:
+    path: "{{ nexus3_home }}"
+    owner: "{{ nexus3_username }}"
+    group: "{{ nexus3_username }}"
+    state: directory
+  become: yes
+
+- name: Scripts for Nexus3 Installation
+  template:
+    src: "{{ item }}"
+    dest: "/tmp/{{ item }}"
+    owner: root
+    group: root
+    mode: 0444
+  with_items:
+    - nexus3_archive_file_url.sh
+
+- name: Nexus Archive File URL Resolving
+  shell: "bash /tmp/nexus3_archive_file_url.sh"
+  register: nexus3_archive_file_url
+
+- name: Nexus Archive File
+  get_url:
+    url: "{{ nexus3_archive_file_url.stdout }}"
+    dest: "/tmp/{{ nexus3_version }}-unix.tar.gz"
+    owner: root
+    group: root
+    mode: 0444
+    validate_certs: yes
+    timeout: 1200
+
+- name: Nexus Installation
+  unarchive:
+    src: "/tmp/{{ nexus3_version }}-unix.tar.gz"
+    copy: no
+    dest: "{{ nexus3_home }}"
+    owner: "{{ nexus3_username }}"
+    group: "{{ nexus3_username }}"
+  become: yes
+  become_user: "{{ nexus3_username }}"
+
+- name: Nexus Init Script
+  file:
+    src: "{{ nexus3_home }}/{{ nexus3_version }}/bin/nexus"
+    path: /etc/init.d/nexus
+    owner: root
+    group: root
+    mode: 0755
+    state: link
+
+- name: Nexus Service Registration
+  shell: chkconfig nexus reset
+  become: yes

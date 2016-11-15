@@ -1,0 +1,10 @@
+---
+# defaults file for ansible-role-nexus3
+
+nexus3_version: nexus-3.1.0-04
+
+nexus3_username: nexus
+
+nexus3_home: /opt/nexus
+
+nexus3_java_home: ''

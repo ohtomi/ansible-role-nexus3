@@ -1,0 +1,16 @@
+---
+# included file
+
+- name: Nexus3 Java Home
+  lineinfile:
+    dest: "{{ nexus3_home }}/{{ nexus3_version }}/bin/nexus"
+    regexp: ^INSTALL4J_JAVA_HOME_OVERRIDE=
+    line: INSTALL4J_JAVA_HOME_OVERRIDE="{{ nexus3_java_home }}"
+  become: yes
+
+- name: Nexus3 User Name
+  lineinfile:
+    dest: "{{ nexus3_home }}/{{ nexus3_version }}/bin/nexus"
+    regexp: ^run_as_user=
+    line: run_as_user="{{ nexus3_username }}"
+  become: yes

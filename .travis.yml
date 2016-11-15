@@ -1,0 +1,27 @@
+---
+sudo: required
+env:
+  - OS_TYPE=centos OS_VERSION=7
+
+services:
+  - docker
+
+before_install:
+  - sudo apt-get update
+  - mkdir -p tests/roles/ansible-role-nexus3
+  - cp -r defaults handlers meta tasks templates vars tests/roles/ansible-role-nexus3/
+  - sudo docker pull ${OS_TYPE}:${OS_VERSION}
+  - sudo docker build --rm=true -t ansible-role-nexus3 tests
+
+script:
+  # Run container in detached state
+  - sudo docker run --detach --privileged ansible-role-nexus3
+  # Check syntax of ansible playbook
+  - sudo docker exec "$(docker ps -lq)" ansible-playbook -i /etc/ansible/inventory /etc/ansible/test.yml --syntax-check
+  # Run ansible playbook
+  - sudo docker exec "$(docker ps -lq)" ansible-playbook -i /etc/ansible/inventory /etc/ansible/test.yml
+  # Clean up
+  - sudo docker stop "$(docker ps -lq)"
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
