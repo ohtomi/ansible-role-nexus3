@@ -24,8 +24,9 @@
   with_items:
     - nexus3_archive_file_url.sh
 
+# see. https://support.sonatype.com/hc/en-us/articles/218637467-Download-Nexus-Repository-Manager-3
 - name: Nexus Archive File URL Resolving
-  shell: "bash /tmp/nexus3_archive_file_url.sh"
+  shell: "bash /tmp/nexus3_archive_file_url.sh http://download.sonatype.com/nexus/3/{{ nexus3_version }}-unix.tar.gz"
   register: nexus3_archive_file_url
   check_mode: no
 
