@@ -1,2 +1,20 @@
 ---
 # handlers file for ansible-role-nexus3
+
+- name: Restart Nexus
+  service:
+    name: nexus
+    state: restarted
+  notify: Wait for Nexus
+  become: yes
+
+- name: Wait for Nexus
+  uri:
+    url: "http://localhost:8081"
+    status_code: 200
+  register: nexus3_top_page
+  until: nexus3_top_page.status == 200
+  retries: 60
+  delay: 1
+
+# TODO: port, context_path: {{ jenkins2_http_port }}{{ jenkins2_context_path | default('') }}

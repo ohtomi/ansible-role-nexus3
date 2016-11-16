@@ -7,6 +7,8 @@
     regexp: ^INSTALL4J_JAVA_HOME_OVERRIDE=
     line: INSTALL4J_JAVA_HOME_OVERRIDE="{{ nexus3_java_home }}"
   become: yes
+  notify:
+    - Restart Nexus
 
 - name: Nexus3 User Name
   lineinfile:
@@ -14,3 +16,16 @@
     regexp: ^run_as_user=
     line: run_as_user="{{ nexus3_username }}"
   become: yes
+  notify:
+    - Restart Nexus
+
+- name: Nexus3 User Name
+  lineinfile:
+    dest: "{{ nexus3_home }}/{{ nexus3_version }}/bin/nexus.rc"
+    regexp: ^#run_as_user=
+    line: run_as_user="{{ nexus3_username }}"
+  become: yes
+  notify:
+    - Restart Nexus
+
+- meta: flush_handlers
