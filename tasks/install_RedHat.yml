@@ -14,7 +14,7 @@
     state: directory
   become: yes
 
-- name: Scripts for Nexus3 Installation
+- name: Scripts for Nexus Installation
   template:
     src: "{{ item }}"
     dest: "/tmp/{{ item }}"
