@@ -1,6 +1,7 @@
 #!/bin/bash
 
 curl_result=`curl -Is $1`
+echo 1>&2
 
 curl_rc=$?
 if [ $curl_rc -ne 0 ]; then
