@@ -1,7 +1,7 @@
 ---
 # included file
 
-- name: Nexus User
+- name: Nexus User Registration
   user:
     name: "{{ nexus3_username }}"
   become: yes
@@ -27,21 +27,24 @@
 - name: Nexus Archive File URL Resolving
   shell: "bash /tmp/nexus3_archive_file_url.sh"
   register: nexus3_archive_file_url
+  check_mode: no
 
 - name: Nexus Archive File
   get_url:
     url: "{{ nexus3_archive_file_url.stdout }}"
+    checksum: "{{ nexus3_get_url_checksum }}"
     dest: "/tmp/{{ nexus3_version }}-unix.tar.gz"
     owner: root
     group: root
     mode: 0444
-    validate_certs: yes
-    timeout: 1200
+    validate_certs: "{{ nexus3_get_url_validate_certs }}"
+    timeout: "{{ nexus3_get_url_timeout }}"
 
 - name: Nexus Installation
   unarchive:
     src: "/tmp/{{ nexus3_version }}-unix.tar.gz"
     copy: no
+    creates: "{{ nexus3_home }}/{{ nexus3_version }}"
     dest: "{{ nexus3_home }}"
     owner: "{{ nexus3_username }}"
     group: "{{ nexus3_username }}"
@@ -59,4 +62,5 @@
 
 - name: Nexus Service Registration
   shell: chkconfig nexus reset
+  check_mode: no
   become: yes

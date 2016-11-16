@@ -13,7 +13,7 @@
     url: "http://localhost:8081"
     status_code: 200
   register: nexus3_top_page
-  until: nexus3_top_page.status == 200
+  until: nexus3_top_page.status is not defined or nexus3_top_page.status == 200
   retries: 60
   delay: 1
 

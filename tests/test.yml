@@ -2,5 +2,7 @@
 - hosts: localhost
   connection: local
   become: yes
+  vars:
+    nexus3_get_url_timeout: 1200
   roles:
     - ansible-role-nexus3
