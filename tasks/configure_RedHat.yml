@@ -1,7 +1,7 @@
 ---
 # included file
 
-- name: Nexus3 Java Home
+- name: Nexus3 Java Home (bin/nexus)
   lineinfile:
     dest: "{{ nexus3_home }}/{{ nexus3_version }}/bin/nexus"
     regexp: ^INSTALL4J_JAVA_HOME_OVERRIDE=
@@ -10,7 +10,7 @@
   notify:
     - Restart Nexus
 
-- name: Nexus3 User Name
+- name: Nexus3 User Name (bin/nexus)
   lineinfile:
     dest: "{{ nexus3_home }}/{{ nexus3_version }}/bin/nexus"
     regexp: ^run_as_user=
@@ -19,11 +19,83 @@
   notify:
     - Restart Nexus
 
-- name: Nexus3 User Name
+- name: Nexus3 User Name (bin/nexus.rc)
   lineinfile:
     dest: "{{ nexus3_home }}/{{ nexus3_version }}/bin/nexus.rc"
     regexp: ^#run_as_user=
     line: run_as_user="{{ nexus3_username }}"
+  become: yes
+  notify:
+    - Restart Nexus
+
+- name: Nexus3 JVM Heap Ms (bin/nexus.vmoptions)
+  lineinfile:
+    dest: "{{ nexus3_home }}/{{ nexus3_version }}/bin/nexus.vmoptions"
+    regexp: ^-Xms
+    line: -Xms{{ nexus3_vmoptions_ms }}
+  become: yes
+  notify:
+    - Restart Nexus
+
+- name: Nexus3 JVM Heap Mx (bin/nexus.vmoptions)
+  lineinfile:
+    dest: "{{ nexus3_home }}/{{ nexus3_version }}/bin/nexus.vmoptions"
+    regexp: ^-Xmx
+    line: -Xmx{{ nexus3_vmoptions_mx }}
+  become: yes
+  notify:
+    - Restart Nexus
+
+- name: Nexus3 JVM Log File (bin/nexus.vmoptions)
+  lineinfile:
+    dest: "{{ nexus3_home }}/{{ nexus3_version }}/bin/nexus.vmoptions"
+    regexp: ^-XX:LogFile=
+    line: -XX:LogFile={{ nexus3_vmoptions_log_file }}
+  become: yes
+  notify:
+    - Restart Nexus
+
+- name: Nexus3 Karaf Data Directory (bin/nexus.vmoptions)
+  lineinfile:
+    dest: "{{ nexus3_home }}/{{ nexus3_version }}/bin/nexus.vmoptions"
+    regexp: ^-Dkaraf.data=
+    line: -Dkaraf.data={{ nexus3_vmoptions_karaf_data }}
+  become: yes
+  notify:
+    - Restart Nexus
+
+- name: Nexus3 JVM Temp Directory (bin/nexus.vmoptions)
+  lineinfile:
+    dest: "{{ nexus3_home }}/{{ nexus3_version }}/bin/nexus.vmoptions"
+    regexp: ^-Djava.io.tmpdir=
+    line: -Djava.io.tmpdir={{ nexus3_vmoptions_java_io_tmpdir }}
+  become: yes
+  notify:
+    - Restart Nexus
+
+- name: Nexus3 Port (etc/nexus-default.properties)
+  lineinfile:
+    dest: "{{ nexus3_home }}/{{ nexus3_version }}/etc/nexus-default.properties"
+    regexp: ^application-port=
+    line: application-port={{ nexus3_http_port }}
+  become: yes
+  notify:
+    - Restart Nexus
+
+- name: Nexus3 Listen Address (etc/nexus-default.properties)
+  lineinfile:
+    dest: "{{ nexus3_home }}/{{ nexus3_version }}/etc/nexus-default.properties"
+    regexp: ^application-host=
+    line: application-host={{ nexus3_listen_address }}
+  become: yes
+  notify:
+    - Restart Nexus
+
+- name: Nexus3 Context Path (etc/nexus-default.properties)
+  lineinfile:
+    dest: "{{ nexus3_home }}/{{ nexus3_version }}/etc/nexus-default.properties"
+    regexp: ^nexus-context-path=
+    line: nexus-context-path={{ nexus3_context_path }}
   become: yes
   notify:
     - Restart Nexus
