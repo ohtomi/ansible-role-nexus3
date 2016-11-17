@@ -25,6 +25,7 @@
     mode: 0444
     validate_certs: "{{ nexus3_get_url_validate_certs }}"
     timeout: "{{ nexus3_get_url_timeout }}"
+  become: yes
 
 - name: Nexus Installation
   unarchive:
@@ -45,6 +46,7 @@
     group: root
     mode: 0755
     state: link
+  become: yes
 
 - name: Nexus Service Registration
   shell: chkconfig nexus reset
