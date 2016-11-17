@@ -14,25 +14,10 @@
     state: directory
   become: yes
 
-- name: Scripts for Nexus Installation
-  template:
-    src: "{{ item }}"
-    dest: "/tmp/{{ item }}"
-    owner: root
-    group: root
-    mode: 0444
-  with_items:
-    - nexus3_archive_file_url.sh
-
 # see. https://support.sonatype.com/hc/en-us/articles/218637467-Download-Nexus-Repository-Manager-3
-- name: Nexus Archive File URL Resolving
-  shell: "bash /tmp/nexus3_archive_file_url.sh http://download.sonatype.com/nexus/3/{{ nexus3_version }}-unix.tar.gz"
-  register: nexus3_archive_file_url
-  check_mode: no
-
 - name: Nexus Archive File
   get_url:
-    url: "{{ nexus3_archive_file_url.stdout }}"
+    url: "http://download.sonatype.com/nexus/3/{{ nexus3_version }}-unix.tar.gz"
     checksum: "{{ nexus3_get_url_checksum }}"
     dest: "/tmp/{{ nexus3_version }}-unix.tar.gz"
     owner: root
