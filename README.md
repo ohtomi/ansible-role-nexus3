@@ -1,4 +1,4 @@
-Role Name
+Nexus 3
 =========
 
 This role can be used to install [Nexus Repository Manager 3](https://www.sonatype.com/download-oss-sonatype).
@@ -9,7 +9,7 @@ Requirements
 ------------
 
 - Ansible 2.x
-- Oracle JDK 8+
+- Oracle JVM 8+
 
 Role Variables
 --------------
@@ -112,7 +112,7 @@ nexus3_listen_address: "0.0.0.0"
 Dependencies
 ------------
 
-- curl
+This role has no dependencies.
 
 Example Playbook
 ----------------
