@@ -38,17 +38,10 @@
   become: yes
   become_user: "{{ nexus3_username }}"
 
-- name: Nexus Init Script
-  file:
-    src: "{{ nexus3_home }}/{{ nexus3_version }}/bin/nexus"
-    path: /etc/init.d/nexus
+- name: Nexus Service Configuration
+  template:
+    src: nexus.service
+    dest: /etc/systemd/system/nexus.service
     owner: root
     group: root
-    mode: 0755
-    state: link
-  become: yes
-
-- name: Nexus Service Registration
-  shell: chkconfig nexus reset
-  check_mode: no
   become: yes
