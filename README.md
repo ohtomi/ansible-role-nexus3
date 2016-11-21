@@ -10,7 +10,6 @@ Requirements
 
 - Ansible 2.x
 - Oracle JVM 8+
-- cron
 - systemd
 - useradd
 - userdel
